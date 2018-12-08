@@ -20,6 +20,7 @@ class FileList:
         # 保存php工程目录
         self.php_path = file_path
         self.rule_list = []
+        self.count = 0
 
     # 目录遍历
     def dir_list(self, file_path='.'):
@@ -48,6 +49,7 @@ class FileList:
             file_content = self.php_file_read(i)
             for index, v in enumerate(file_content):
                 self.audit(v, file_ood, index)
+        print("共发现"+str(self.count)+"个可疑漏洞")
 
     # 规则匹配 取出函数和形参
     def audit(self, content, file_ood, line):
@@ -55,15 +57,16 @@ class FileList:
         fun = re.findall(r'\W*(\w+?)\(', content)
         for k in fun:
             # 匹配参数列表,是否有变量
-            variable = re.findall(r'(\$\w+?)[,|\)]',content)
+            variable = re.findall(r'(\$[\w\->]+?)[,|\)]',content)
             if len(variable) > 0:
                 if k in self.rule_list:
                     print("-----发现危险函数中存在变量-----")
                     print("file path: "+file_ood.get_file_name())
-                    print("line: "+str(line))
+                    print("line: "+str(line+1))
                     print("function: "+k)
                     print("variable: "+','.join(variable))
                     print("--------------------------------")
+                    self.count += 1
             file_ood.add_func(k, line=line,var=variable)
 
     # txt读入列表
