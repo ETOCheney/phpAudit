@@ -64,7 +64,7 @@ class FileList:
                     print("[*] "+ v)
                     print("[*] file:"+file_ood.get_file_name())
                     print("[*] line:"+str(line+1))
-                    print("[*] code:"+content.strip())
+                    print("[*] code:"+content.strip()[:40])
                 self.count+=1
 
     # 规则匹配 存储危险函数列表 用于后期UI版
@@ -113,4 +113,4 @@ class FileList:
 
         except Exception as e:
             print("编码转换失败")
-            exit(10086)
+            return ''
