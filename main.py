@@ -2,6 +2,7 @@
 from controller import CodeAudit
 import getopt
 import sys
+from PyQt5.QtWidgets import QApplication, QMainWindow
 
 if __name__ == "__main__":
     # 获取输入参数
@@ -42,9 +43,14 @@ if __name__ == "__main__":
                 print("文件路径不要使用\\,使用/或者使用\\\\")
                 exit(0)
         elif opt in ("-G"):
-            print("开发中……")
-            sys.exit(0)
+            win = windows.Ui_MainWindow()
 
     if 'path' in dir():
         f = CodeAudit.FileList(path, "func.json")
         f.audit_init()
+    elif 'win' in dir():
+        app = QApplication(sys.argv)
+        MainWindow = QMainWindow()
+        win.setupUi(MainWindow)
+        MainWindow.show()
+        sys.exit(app.exec_())
